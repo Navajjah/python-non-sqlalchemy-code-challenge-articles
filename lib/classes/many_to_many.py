@@ -41,8 +41,35 @@ class Author:
 
 class Magazine:
     def __init__(self, name, category):
-        self.name = name
-        self.category = category
+        if not isinstance(name, str):
+            raise ValueError('Magazine name has to be a string')
+        if not isinstance(category, str):
+            raise ValueError('Magazine category must be a string')
+        self._name = name
+        self._category = category
+        self._articles = []
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if isinstance(value, str) and 2 <= len(value) <= 16:
+            self._name = value
+        else:
+            print(f"Invalid new asssignment. '{value}' is not a valid string.") 
+
+    @property
+    def category(self):
+        return self._category
+    
+    @category.setter
+    def category(self, value):
+        if isinstance(value, str) and len(value) > 0:
+            self._category = value
+        else:
+            print(f"Invalid new asssignment. '{value}' is not a valid string.")
 
     def articles(self):
         return[article for article in Article.all if article.magazine == self]
@@ -51,7 +78,19 @@ class Magazine:
         return list(set(article.author for article in self.articles()))
 
     def article_titles(self):
-        return[article.title for article in self.articles()]
+        articles = self.articles()
+        if articles:
+            return[article.title for article in articles]
+        return None
 
     def contributing_authors(self):
-        return[article.author.name for article in self.articles()] 
+        authors_number = {}
+        
+        for article in self.articles():
+            if article.author in authors_number:
+                authors_number[article.author] += 1
+            else:
+                authors_number[article.author] = 1
+        contributing_authors = [author for author, number in authors_number.items() if number > 2]
+    
+        return contributing_authors if contributing_authors else None
