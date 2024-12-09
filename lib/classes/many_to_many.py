@@ -84,13 +84,13 @@ class Magazine:
         return None
 
     def contributing_authors(self):
-        authors_number = {}
+        number_of_authors = {}
         
         for article in self.articles():
-            if article.author in authors_number:
-                authors_number[article.author] += 1
+            if article.author in number_of_authors:
+                number_of_authors[article.author] += 1
             else:
-                authors_number[article.author] = 1
-        contributing_authors = [author for author, number in authors_number.items() if number > 2]
+                number_of_authors[article.author] = 1
+        contributing_authors = [author for author, number in number_of_authors.items() if number > 2]
     
         return contributing_authors if contributing_authors else None
